@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-autowire="byType"
+>
+    <context:property-placeholder location="user.init.properties, event.properties"/>
+    <context:annotation-config></context:annotation-config>
+    <context:component-scan base-package="application.config"/>
+
+    <bean id="userService" class="application.service.UserService">
+    </bean>
+
+    <bean id="dataBase" class="application.databaseamulation.Database" init-method="initMethod"
+    >
+        <property name="idFactory" ref="idFactory" />
+        <property name="userMap" ref="userMapProp" />
+    </bean>
+
+    <bean id="idFactory" class="application.config.IdFactory" >
+    </bean>
+
+    <bean id="Anton" class="application.model.User" p:id="${Anton.Id}" p:name="${Anton.Name}">
+    </bean>
+
+
+    <util:map id="userMapProp" >
+        <entry key="1" value-ref="Anton"/>
+    </util:map>
+
+    <bean id="Event1" class="application.model.Event" p:id="1" p:name="Name"/>
+    <bean id="Ticket1" class="application.model.Ticket" p:id="1" p:placeNumber="2"/>
+    <bean id="Ticket2" class="application.model.Ticket" p:id="2" p:placeNumber="3"/>
+    <bean id="Ticket3" class="application.model.Ticket" p:id="3" p:placeNumber="444"/>
+
+    <bean id="UserRepo" class="application.repository.UserRepo"></bean>
+    <bean id="TicketRepo" class="application.repository.TicketRepo"></bean>
+    <bean id="EventRepo" class="application.repository.EventRepo"></bean>
+    <bean id="OrderRepo" class="application.repository.OrderRepo"></bean>
+
+    <bean id="EventService" class="application.service.EventService"></bean>
+    <bean id="TicketService" class="application.service.TicketService"></bean>
+    <bean id="OrderService" class="application.service.OrderService"></bean>
+    <bean id="UserService" class="application.service.UserService"></bean>
+
+    <bean id="TicketBookingService" class="application.service.TicketBookingService">
+        <property name="ticketService" ref="TicketService"></property>
+        <property name="eventService" ref="EventService"></property>
+        <property name="orderService" ref="OrderService"></property>
+        <property name="userService" ref="UserService"></property>
+    </bean>
+
+<!--    <bean id="userMap" class="application.config.MapConfigurer">-->
+<!--        <property name="userMap">-->
+<!--            <util:map id="userMapProp">-->
+<!--                <entry key="1" value-ref="Anton"/>-->
+<!--            </util:map>-->
+<!--&lt;!&ndash;            <map>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="pechorin" value="pechorin@hero.org"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="raskolnikov" value="raskolnikov@slums.org"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="stavrogin" value="stavrogin@gov.org"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="porfiry" value="porfiry@gov.org"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </map>&ndash;&gt;-->
+<!--        </property>-->
+<!--    </bean>-->
+
+</beans>
